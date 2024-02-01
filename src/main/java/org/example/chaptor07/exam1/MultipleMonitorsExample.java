@@ -48,7 +48,7 @@ class BankAccount {
 
 public class MultipleMonitorsExample {
     public static void main(String[] args) throws InterruptedException {
-        synchronized (MultipleMonitorsExample.class) {
+        synchronized (MultipleMonitorsExample.class) { // synchronized의 재진입성
             synchronized (MultipleMonitorsExample.class) {
                 synchronized (MultipleMonitorsExample.class) {
                     synchronized (MultipleMonitorsExample.class) {
