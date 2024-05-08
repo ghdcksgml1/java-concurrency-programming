@@ -1,24 +1,26 @@
 package org.example.chaptor11.exam2;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class CompletableFutureExample {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        ExecutorService executorService = Executors.newFixedThreadPool(5);
-
-        Future<Integer> future1 = executorService.submit(new Service1());
-        Future<Integer> future2 = executorService.submit(new Service2(future1));
-        Future<Integer> future3 = executorService.submit(new Service3(future2));
-        Future<Integer> future4 = executorService.submit(new Service4(future3));
-        Future<Integer> future5 = executorService.submit(new Service5(future4));
-
-        // 최종 결과를 얻기 위해 future5의 완료를 기다림
-        int finalResult = future5.get();
-
-        executorService.shutdown();
-        System.out.println("최종 결과: " + finalResult);
+        Integer result = CompletableFuture.supplyAsync(() -> {
+            System.out.println(Thread.currentThread().getName() + ": Service1 시작");
+            return 1;
+        }).thenApplyAsync(result2 -> {
+            System.out.println(Thread.currentThread().getName() + ": Service2 시작");
+            return result2 + 1;
+        }).thenApplyAsync(result3 -> {
+            System.out.println(Thread.currentThread().getName() + ": Service3 시작");
+            return result3 + 1;
+        }).thenApplyAsync(result4 -> {
+            System.out.println(Thread.currentThread().getName() + ": Service4 시작");
+            return result4 + 1;
+        }).thenApplyAsync(result5 -> {
+            System.out.println(Thread.currentThread().getName() + ": Service5 시작");
+            return result5 + 1;
+        }).get();
+        System.out.println("result = " + result);
     }
 }
